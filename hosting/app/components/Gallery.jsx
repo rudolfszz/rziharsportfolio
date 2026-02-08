@@ -230,12 +230,12 @@ export default function Gallery({ folder = "images" }) {
                 style={{
                   width: "min(1200px, 100%)",
                   display: "grid",
-                  gridTemplateColumns: "minmax(0, 1fr) 280px",
+                  gridTemplateColumns: "auto 280px",
                   gap: "28px",
                   alignItems: "stretch",
                   background: "transparent",
                   padding: 0,
-                  height: "min(80vh, 720px)",
+                  height: "min(70vh, 640px)",
                 }}
                 onClick={(event) => event.stopPropagation()}
               >
@@ -244,6 +244,8 @@ export default function Gallery({ folder = "images" }) {
                     display: "flex",
                     justifyContent: "center",
                     height: "100%",
+                    width: "auto",
+                    maxWidth: "100%",
                   }}
                 >
                   {selectedUrl ? (
@@ -251,8 +253,10 @@ export default function Gallery({ folder = "images" }) {
                       src={selectedUrl}
                       alt=""
                       style={{
-                        width: "100%",
+                        width: "auto",
                         height: "100%",
+                        maxHeight: "70vh",
+                        maxWidth: "100%",
                         borderRadius: "10px",
                         objectFit: "cover",
                         background: "transparent",

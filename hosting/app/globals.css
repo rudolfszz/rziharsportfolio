@@ -10,3 +10,59 @@ body {
 body {
   margin: 0;
 }
+
+.globe-scene {
+  position: relative;
+  width: 100%;
+  height: min(70vh, 720px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+.globe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  animation: globe-spin 42s linear infinite;
+}
+
+.globe.is-paused {
+  animation-play-state: paused;
+}
+
+.globe-item {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+.globe-card {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.globe-image {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  background: transparent;
+}
+
+@keyframes globe-spin {
+  from {
+    transform: translate(-50%, -50%) rotateY(0deg) rotateX(8deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotateY(360deg) rotateX(8deg);
+  }
+}

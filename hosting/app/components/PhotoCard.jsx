@@ -5,17 +5,18 @@ import { useMemo, useState } from "react";
 export default function PhotoCard({
   filename,
   alt = "",
-  projectId,
   className = "",
 }) {
   const [loaded, setLoaded] = useState(false);
 
-  const resolvedProjectId =
-    projectId || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "";
+  const resolvedProjectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "";
+  const resolvedBucket =
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+    (resolvedProjectId ? `${resolvedProjectId}.appspot.com` : "");
 
   const { thumbUrl, fullUrl } = useMemo(() => {
     const safeName = filename.endsWith(".avif") ? filename : `${filename}.avif`;
-    const base = `https://firebasestorage.googleapis.com/v0/b/${resolvedProjectId}.appspot.com/o`;
+    const base = `https://firebasestorage.googleapis.com/v0/b/${resolvedBucket}/o`;
 
     const buildUrl = (folder) => {
       const path = `${folder}/${safeName}`;
@@ -26,7 +27,7 @@ export default function PhotoCard({
       thumbUrl: buildUrl("thumbnails"),
       fullUrl: buildUrl("images"),
     };
-  }, [filename, resolvedProjectId]);
+  }, [filename, resolvedBucket]);
 
   return (
     <div className={`relative overflow-hidden ${className}`}>

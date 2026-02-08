@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +11,7 @@ body {
 
 body {
   margin: 0;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 .globe-scene {
@@ -19,6 +22,7 @@ body {
   align-items: center;
   justify-content: center;
   perspective: 1200px;
+  transform: translateY(-24px);
 }
 
 .globe {
@@ -26,7 +30,7 @@ body {
   top: 50%;
   left: 50%;
   transform-style: preserve-3d;
-  animation: globe-spin 42s linear infinite;
+  transform: translate(-50%, -50%) rotateY(var(--globe-angle, 0deg)) rotateX(8deg);
 }
 
 .globe.is-paused {
@@ -42,8 +46,8 @@ body {
   display: inline-grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
-  border-radius: 12px;
-  overflow: hidden;
+  border-radius: 0;
+  overflow: visible;
   background: transparent;
   padding: 0;
   cursor: pointer;
@@ -58,11 +62,3 @@ body {
   background: transparent;
 }
 
-@keyframes globe-spin {
-  from {
-    transform: translate(-50%, -50%) rotateY(0deg) rotateX(8deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotateY(360deg) rotateX(8deg);
-  }
-}

@@ -1,0 +1,8 @@
+{
+  "name": "portfolioRzihars",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm --prefix hosting ci",
+    "build": "npm --prefix hosting run build"
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { getStorage, listAll, ref } from "firebase/storage";
 import { firebaseApp } from "../lib/firebaseClient";
@@ -20,31 +20,15 @@ const buildUrl = (bucket, folder, filename) => {
   return `${base}/${encodeURIComponent(path)}?alt=media`;
 };
 
-function SphereImage({ thumbUrl, fullUrl, size, onClick, loaded, setLoaded }) {
+function SphereImage({ fullUrl, size, onClick }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="globe-card bg-neutral-200 shadow-lg"
-      style={{ width: size }}
+      className="globe-card"
+      style={{ width: size, border: "none", background: "transparent", padding: 0 }}
     >
-      <img
-        src={thumbUrl}
-        alt=""
-        className={`globe-image transition-opacity duration-500 ${
-          loaded ? "opacity-0" : "opacity-100 blur-2xl"
-        }`}
-        aria-hidden="true"
-      />
-      <img
-        src={fullUrl}
-        alt=""
-        className={`globe-image transition-opacity duration-700 ${
-          loaded ? "opacity-100" : "opacity-0"
-        }`}
-        loading="lazy"
-        onLoad={() => setLoaded(true)}
-      />
+      <img src={fullUrl} alt="" className="globe-image" loading="lazy" />
     </button>
   );
 }
@@ -53,9 +37,10 @@ export default function Gallery({ folder = "images" }) {
   const [filenames, setFilenames] = useState([]);
   const [error, setError] = useState("");
   const [selected, setSelected] = useState(null);
-  const [loadedMap, setLoadedMap] = useState({});
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
-  const [mounted, setMounted] = useState(false);
+  const globeRef = useRef(null);
+  const angleRef = useRef(0);
+  const lastTimeRef = useRef(0);
 
   const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "";
 
@@ -64,8 +49,6 @@ export default function Gallery({ folder = "images" }) {
   }, [filenames]);
 
   useEffect(() => {
-    setMounted(true);
-
     const updateViewport = () => {
       setViewport({ width: window.innerWidth, height: window.innerHeight });
     };
@@ -101,6 +84,40 @@ export default function Gallery({ folder = "images" }) {
       window.removeEventListener("resize", updateViewport);
     };
   }, [folder, projectId]);
+
+  useEffect(() => {
+    let frameId;
+
+    const baseSpeed = 360 / 70;
+    const slowSpeed = 360 / 140;
+
+    const tick = (time) => {
+      if (!lastTimeRef.current) {
+        lastTimeRef.current = time;
+      }
+
+      const delta = (time - lastTimeRef.current) / 1000;
+      lastTimeRef.current = time;
+
+      const speed = selected ? slowSpeed : baseSpeed;
+      angleRef.current = (angleRef.current + delta * speed) % 360;
+
+      if (globeRef.current) {
+        globeRef.current.style.setProperty(
+          "--globe-angle",
+          `${angleRef.current}deg`
+        );
+      }
+
+      frameId = requestAnimationFrame(tick);
+    };
+
+    frameId = requestAnimationFrame(tick);
+
+    return () => {
+      if (frameId) cancelAnimationFrame(frameId);
+    };
+  }, [selected]);
 
   const globeData = useMemo(() => {
     const count = sortedFilenames.length;
@@ -142,55 +159,45 @@ export default function Gallery({ folder = "images" }) {
   const selectedUrl = selected?.fullUrl || "";
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-12">
+    <section className="mx-auto w-full max-w-6xl px-4">
       {error ? (
         <p className="text-sm text-red-600">{error}</p>
       ) : (
         <div className="globe-scene">
-          <div className={`globe ${selected ? "is-paused" : ""}`}>
+          <div className="globe" ref={globeRef}>
             {globeData.map((item) => {
-              const thumbUrl = buildUrl(bucket, "thumbnails", item.filename);
               const fullUrl = buildUrl(bucket, "images", item.filename);
 
               return (
-              <div
-                key={item.filename}
-                className="globe-item"
-                style={{
-                  transform: `translate3d(${item.x}px, ${item.y}px, ${item.z}px) scale(${item.scale})`,
-                  opacity: item.opacity,
-                  zIndex: item.zIndex,
-                }}
-              >
-                <SphereImage
-                  thumbUrl={thumbUrl}
-                  fullUrl={fullUrl}
-                  size={itemSize}
-                  loaded={!!loadedMap[item.filename]}
-                  setLoaded={(value) =>
-                    setLoadedMap((prev) => ({
-                      ...prev,
-                      [item.filename]: value,
-                    }))
-                  }
-                  onClick={() =>
-                    setSelected({
-                      filename: item.filename,
-                      fullUrl,
-                    })
-                  }
-                />
-              </div>
+                <div
+                  key={item.filename}
+                  className="globe-item"
+                  style={{
+                    transform: `translate3d(${item.x}px, ${item.y}px, ${item.z}px) scale(${item.scale})`,
+                    opacity: item.opacity,
+                    zIndex: item.zIndex,
+                  }}
+                >
+                  <SphereImage
+                    fullUrl={fullUrl}
+                    size={itemSize}
+                    onClick={() =>
+                      setSelected({
+                        filename: item.filename,
+                        fullUrl,
+                      })
+                    }
+                  />
+                </div>
               );
             })}
           </div>
         </div>
       )}
 
-      {mounted && selected
+      {selected
         ? createPortal(
             <div
-              className=""
               style={{
                 position: "fixed",
                 inset: 0,
@@ -212,13 +219,13 @@ export default function Gallery({ folder = "images" }) {
                   position: "fixed",
                   top: "20px",
                   right: "20px",
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "999px",
-                  border: "1px solid rgba(255, 255, 255, 0.4)",
-                  background: "rgba(0, 0, 0, 0.6)",
+                  width: "48px",
+                  height: "48px",
+                  border: "none",
+                  background: "transparent",
                   color: "#ffffff",
-                  fontSize: "22px",
+                  fontSize: "34px",
+                  fontWeight: 300,
                   lineHeight: 1,
                   cursor: "pointer",
                 }}
@@ -226,7 +233,6 @@ export default function Gallery({ folder = "images" }) {
                 ×
               </button>
               <div
-                className=""
                 style={{
                   width: "min(1200px, 100%)",
                   display: "grid",
@@ -257,7 +263,7 @@ export default function Gallery({ folder = "images" }) {
                         height: "100%",
                         maxHeight: "70vh",
                         maxWidth: "100%",
-                        borderRadius: "10px",
+                        borderRadius: "0",
                         objectFit: "cover",
                         background: "transparent",
                       }}
@@ -281,9 +287,10 @@ export default function Gallery({ folder = "images" }) {
                 >
                   <p
                     style={{
-                      fontSize: "14px",
+                      fontSize: "20px",
                       lineHeight: 1.6,
                       opacity: 0.9,
+                      fontWeight: 400,
                       margin: 0,
                     }}
                   >
@@ -292,14 +299,14 @@ export default function Gallery({ folder = "images" }) {
                   <div>
                     <div
                       style={{
-                        fontSize: "28px",
-                        fontStyle: "italic",
-                        fontWeight: 600,
+                        fontSize: "38px",
+                        fontStyle: "normal",
+                        fontWeight: 700,
                       }}
                     >
                       Sunburn
                     </div>
-                    <div style={{ fontSize: "16px", opacity: 0.85 }}>
+                    <div style={{ fontSize: "26px", opacity: 0.85, fontWeight: 400 }}>
                       @ The Hague, 2025
                     </div>
                   </div>

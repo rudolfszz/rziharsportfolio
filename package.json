@@ -4,5 +4,8 @@
   "scripts": {
     "postinstall": "npm --prefix hosting ci",
     "build": "npm --prefix hosting run build"
+  },
+  "dependencies": {
+    "firebase": "^12.9.0"
   }
 }

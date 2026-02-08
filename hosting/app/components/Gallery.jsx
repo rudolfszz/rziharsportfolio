@@ -45,17 +45,17 @@ export default function Gallery({ folder = "images" }) {
   }, [folder, projectId]);
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-12">
+    <section className="mx-auto w-full max-w-5xl px-4 py-12">
       {error ? (
         <p className="text-sm text-red-600">{error}</p>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6">
           {sortedFilenames.map((filename) => (
             <PhotoCard
               key={filename}
               filename={filename}
               alt={""}
-              className="aspect-[4/5] rounded-2xl bg-neutral-200"
+              className="aspect-video w-full rounded-2xl bg-neutral-200"
             />
           ))}
         </div>

@@ -35,9 +35,9 @@ export default function PhotoCard({
         src={thumbUrl}
         alt={alt}
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
-          loaded ? "opacity-0" : "opacity-100 blur-xl scale-110"
+          loaded ? "opacity-0" : "opacity-100 blur-2xl"
         }`}
-        aria-hidden={alt ? "false" : "true"}
+        aria-hidden="true"
       />
       <img
         src={fullUrl}

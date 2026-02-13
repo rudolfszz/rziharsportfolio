@@ -123,7 +123,8 @@ export default function Gallery({ folder = "images" }) {
     const count = sortedFilenames.length;
     if (!count) return [];
 
-    const radius = Math.max(140, Math.min(viewport.width, 1000) * 0.32);
+    const minSide = Math.min(viewport.width, viewport.height || viewport.width);
+    const radius = Math.max(110, Math.min(minSide, 900) * 0.34);
     const goldenAngle = Math.PI * (3 - Math.sqrt(5));
 
     return sortedFilenames.map((filename, index) => {
@@ -147,19 +148,20 @@ export default function Gallery({ folder = "images" }) {
         zIndex: Math.round(depth * 1000),
       };
     });
-  }, [sortedFilenames, viewport.width]);
+  }, [sortedFilenames, viewport.width, viewport.height]);
 
   const itemSize = useMemo(() => {
-    if (viewport.width < 640) return 72;
-    if (viewport.width < 1024) return 96;
-    return 140;
+    if (viewport.width < 480) return 56;
+    if (viewport.width < 640) return 64;
+    if (viewport.width < 1024) return 88;
+    return 120;
   }, [viewport.width]);
 
   const bucket = getBucket();
   const selectedUrl = selected?.fullUrl || "";
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4">
+    <section className="mx-auto w-full max-w-6xl px-4 h-full">
       {error ? (
         <p className="text-sm text-red-600">{error}</p>
       ) : (

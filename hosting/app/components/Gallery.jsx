@@ -20,7 +20,7 @@ const buildUrl = (bucket, folder, filename) => {
   return `${base}/${encodeURIComponent(path)}?alt=media`;
 };
 
-function SphereImage({ fullUrl, size, onClick }) {
+function SphereImage({ thumbUrl, fullUrl, size, onClick, loaded, setLoaded }) {
   return (
     <button
       type="button"
@@ -28,7 +28,23 @@ function SphereImage({ fullUrl, size, onClick }) {
       className="globe-card"
       style={{ width: size, border: "none", background: "transparent", padding: 0 }}
     >
-      <img src={fullUrl} alt="" className="globe-image" loading="lazy" />
+      <img
+        src={thumbUrl}
+        alt=""
+        className={`globe-image transition-opacity duration-500 ${
+          loaded ? "opacity-0" : "opacity-100 blur-2xl"
+        }`}
+        aria-hidden="true"
+      />
+      <img
+        src={fullUrl}
+        alt=""
+        className={`globe-image transition-opacity duration-700 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+      />
     </button>
   );
 }
@@ -38,6 +54,7 @@ export default function Gallery({ folder = "images" }) {
   const [error, setError] = useState("");
   const [selected, setSelected] = useState(null);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
+  const [loadedMap, setLoadedMap] = useState({});
   const globeRef = useRef(null);
   const angleRef = useRef(0);
   const lastTimeRef = useRef(0);
@@ -168,6 +185,7 @@ export default function Gallery({ folder = "images" }) {
         <div className="globe-scene">
           <div className="globe" ref={globeRef}>
             {globeData.map((item) => {
+              const thumbUrl = buildUrl(bucket, "thumbnails", item.filename);
               const fullUrl = buildUrl(bucket, "images", item.filename);
 
               return (
@@ -181,8 +199,16 @@ export default function Gallery({ folder = "images" }) {
                   }}
                 >
                   <SphereImage
+                    thumbUrl={thumbUrl}
                     fullUrl={fullUrl}
                     size={itemSize}
+                    loaded={!!loadedMap[item.filename]}
+                    setLoaded={(value) =>
+                      setLoadedMap((prev) => ({
+                        ...prev,
+                        [item.filename]: value,
+                      }))
+                    }
                     onClick={() =>
                       setSelected({
                         filename: item.filename,

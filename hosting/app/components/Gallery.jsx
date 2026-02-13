@@ -260,11 +260,11 @@ export default function Gallery({ folder = "images" }) {
                       alt=""
                       style={{
                         width: "auto",
-                        height: "100%",
+                        height: "auto",
                         maxHeight: "70vh",
-                        maxWidth: "100%",
+                        maxWidth: "70vw",
                         borderRadius: "0",
-                        objectFit: "cover",
+                        objectFit: "contain",
                         background: "transparent",
                       }}
                     />

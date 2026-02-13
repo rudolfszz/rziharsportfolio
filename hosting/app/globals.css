@@ -17,12 +17,12 @@ body {
 .globe-scene {
   position: relative;
   width: 100%;
-  height: min(70vh, 720px);
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   perspective: 1200px;
-  transform: translateY(-24px);
+  transform: translateY(calc(clamp(-96px, -8vh, -32px) - 10px));
 }
 
 .globe {

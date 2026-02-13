@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { getStorage, listAll, ref } from "firebase/storage";
+import photos from "../data/photos.json";
 import { firebaseApp } from "../lib/firebaseClient";
 
 const getBucket = () => {
@@ -64,6 +65,13 @@ export default function Gallery({ folder = "images" }) {
   const sortedFilenames = useMemo(() => {
     return [...filenames].sort((a, b) => a.localeCompare(b));
   }, [filenames]);
+
+  const photoMetaBySlug = useMemo(() => {
+    return photos.reduce((acc, photo) => {
+      acc[photo.slug] = photo;
+      return acc;
+    }, {});
+  }, []);
 
   useEffect(() => {
     const updateViewport = () => {
@@ -176,6 +184,7 @@ export default function Gallery({ folder = "images" }) {
 
   const bucket = getBucket();
   const selectedUrl = selected?.fullUrl || "";
+  const selectedMeta = selected ? photoMetaBySlug[selected.slug] || {} : {};
 
   return (
     <section className="mx-auto w-full max-w-6xl px-4 h-full">
@@ -185,6 +194,7 @@ export default function Gallery({ folder = "images" }) {
         <div className="globe-scene">
           <div className="globe" ref={globeRef}>
             {globeData.map((item) => {
+              const slug = item.filename.replace(/\.[^/.]+$/, "");
               const thumbUrl = buildUrl(bucket, "thumbnails", item.filename);
               const fullUrl = buildUrl(bucket, "images", item.filename);
 
@@ -212,6 +222,7 @@ export default function Gallery({ folder = "images" }) {
                     onClick={() =>
                       setSelected({
                         filename: item.filename,
+                        slug,
                         fullUrl,
                       })
                     }
@@ -313,29 +324,49 @@ export default function Gallery({ folder = "images" }) {
                     alignItems: "flex-end",
                   }}
                 >
-                  <p
-                    style={{
-                      fontSize: "20px",
-                      lineHeight: 1.6,
-                      opacity: 0.9,
-                      fontWeight: 400,
-                      margin: 0,
-                    }}
-                  >
-                    PLACEHOLDER
-                  </p>
+                  <div>
+                    <p
+                      style={{
+                        fontSize: "22px",
+                        lineHeight: 1.6,
+                        opacity: 1,
+                        fontWeight: 400,
+                        fontStyle: "italic",
+                        margin: 0,
+                      }}
+                    >
+                      “{selectedMeta.quote || "PLACEHOLDER"}”
+                    </p>
+                    {selectedMeta.description ? (
+                      <p
+                        style={{
+                          fontSize: "19px",
+                          opacity: 0.95,
+                          margin: "12px 0 0",
+                        }}
+                      >
+                        {selectedMeta.description}
+                      </p>
+                    ) : null}
+                  </div>
                   <div>
                     <div
                       style={{
-                        fontSize: "38px",
+                        fontSize: "42px",
                         fontStyle: "normal",
                         fontWeight: 700,
                       }}
                     >
-                      Sunburn
+                      {selectedMeta.title || "Sunburn"}
                     </div>
-                    <div style={{ fontSize: "26px", opacity: 0.85, fontWeight: 400 }}>
-                      @ The Hague, 2025
+                    <div style={{ fontSize: "28px", opacity: 0.9, fontWeight: 400 }}>
+                      {selectedMeta.location && selectedMeta.year
+                        ? `@ ${selectedMeta.location}, ${selectedMeta.year}`
+                        : selectedMeta.location
+                        ? `@ ${selectedMeta.location}`
+                        : selectedMeta.year
+                        ? selectedMeta.year
+                        : "@ The Hague, 2025"}
                     </div>
                   </div>
                 </div>

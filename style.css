@@ -27,7 +27,6 @@ body {
 .gallery-item {
     break-inside: avoid;
     margin-bottom: 0vw; /* Larger gap between rows */
-    background-color: #f7f7f7;
     overflow: hidden;
 }
 
@@ -65,7 +64,7 @@ body {
 .footer-name a {
     text-decoration: none;
     color: inherit;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.7s ease;
 }
 
 .footer-name a:hover {
@@ -96,15 +95,41 @@ body {
     opacity: 0.5;
 }
 
+
+/* Medium Density 5-Column Gallery (Used for Archive) */
+.gallery-5-col {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    width: 100%;
+}
+
+@media (max-width: 1300px) {
+    .gallery-6-col {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .gallery-5-col {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .gallery-5-col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 /* Section Headers for Experiments & Archive */
 .section-header {
     font-family: "Tenor Sans", sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     letter-spacing: -0.04em;
-    padding: 5px 1vw 5px;
+    padding: 20px 1vw 20px;
     color: #000;
     text-transform: uppercase;
+    text-align: left;
 }
+
 
 /* Contact Page Styles */
 .contact-container {
@@ -122,6 +147,7 @@ body {
     font-size: 1.5rem;
     line-height: 2;
     letter-spacing: 0.02em;
+    text-align: center;
 }
 
 .contact-info a {
@@ -135,10 +161,11 @@ body {
     border-bottom: 1px solid #000;
 }
 
-/* Condensed Gallery for Experiments & Archive */
+/* Condensed Gallery for Experiments & Archive - Disabled for edge-to-edge */
 .gallery-condensed {
-    width: 80%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
+    text-align: left;
 }
 
 /* Responsiveness: Strictly switch to 2 columns, no 3 or 1 */

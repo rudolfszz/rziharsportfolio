@@ -1,0 +1,53 @@
+/* Focused Image Presentation Style (McKinnon Inspired) */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #ffffff;
+    overflow-x: hidden;
+    padding: 0vh 0 0 0; /* 10vh gap from the top, zero on sides/bottom */
+}
+
+.gallery-wrapper {
+    width: 100%; /* Full width */
+    margin: 0;
+}
+
+/* Binary Column Gallery: Exactly 4 or 2 Columns */
+.gallery {
+    column-count: 3; /* Maximum 4 columns */
+    column-gap: 0vw; /* Larger gap between columns */
+    width: 100%;
+}
+
+.gallery-item {
+    break-inside: avoid;
+    margin-bottom: 0vw; /* Larger gap between rows */
+    background-color: #f7f7f7;
+    overflow: hidden;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto; /* Full Glory - No Cropping */
+    display: block;
+    filter: grayscale(10%) contrast(105%);
+    transition: 
+        transform 0.8s cubic-bezier(0.2, 1, 0.3, 1),
+        filter 0.5s ease;
+}
+
+/* Responsiveness: Strictly switch to 2 columns, no 3 or 1 */
+@media (max-width: 1100px) {
+    .gallery {
+        column-count: 2; /* Minimum 2 columns */
+        column-gap: 0vw;
+    }
+    .gallery-item {
+        margin-bottom: 0vw;
+    }
+}

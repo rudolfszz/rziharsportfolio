@@ -62,6 +62,16 @@ body {
     white-space: nowrap;
 }
 
+.footer-name a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.3s ease;
+}
+
+.footer-name a:hover {
+    opacity: 0.7;
+}
+
 .footer-nav {
     grid-column: 3; /* Aligns links to the right */
     justify-self: end;
@@ -88,14 +98,12 @@ body {
 
 /* Section Headers for Experiments & Archive */
 .section-header {
-    font-family: "Vina Sans", sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 0.05em;
-    padding: 80px 3vw 20px;
+    font-family: "Tenor Sans", sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: -0.04em;
+    padding: 5px 1vw 5px;
     color: #000;
     text-transform: uppercase;
-    border-bottom: 1px solid #f0f0f0;
-    margin-bottom: 0;
 }
 
 /* Contact Page Styles */
@@ -125,6 +133,12 @@ body {
 
 .contact-info a:hover {
     border-bottom: 1px solid #000;
+}
+
+/* Condensed Gallery for Experiments & Archive */
+.gallery-condensed {
+    width: 80%;
+    margin: 0 auto;
 }
 
 /* Responsiveness: Strictly switch to 2 columns, no 3 or 1 */

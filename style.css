@@ -35,17 +35,14 @@ body {
     width: 100%;
     height: auto; /* Full Glory - No Cropping */
     display: block;
-    filter: grayscale(10%) contrast(105%);
-    transition: 
-        transform 0.8s cubic-bezier(0.2, 1, 0.3, 1),
-        filter 0.5s ease;
 }
 
 /* Site Footer - Appears naturally at the end of scroll */
 .site-footer {
-    padding: 60px 5vw 15px; /* Generous top padding to separate from gallery */
+    padding: 60px 3vw 15px; /* Generous top padding to separate from gallery */
     background-color: #ffffff;
     font-family: "Tenor Sans", sans-serif;
+}
 
 .footer-content {
     display: grid;
@@ -63,6 +60,16 @@ body {
     text-transform: uppercase;
     font-size: 1.9rem; /* Slightly larger for Vina Sans impact */
     white-space: nowrap;
+}
+
+.footer-name a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.3s ease;
+}
+
+.footer-name a:hover {
+    opacity: 0.7;
 }
 
 .footer-nav {
@@ -88,6 +95,50 @@ body {
 .footer-nav a:hover {
     opacity: 0.5;
 }
+
+/* Section Headers for Experiments & Archive */
+.section-header {
+    font-family: "Tenor Sans", sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: -0.04em;
+    padding: 5px 1vw 5px;
+    color: #000;
+    text-transform: uppercase;
+}
+
+/* Contact Page Styles */
+.contact-container {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 3vw;
+}
+
+.contact-info {
+    font-family: "Tenor Sans", sans-serif;
+    font-size: 1.5rem;
+    line-height: 2;
+    letter-spacing: 0.02em;
+}
+
+.contact-info a {
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.3s ease;
+}
+
+.contact-info a:hover {
+    border-bottom: 1px solid #000;
+}
+
+/* Condensed Gallery for Experiments & Archive */
+.gallery-condensed {
+    width: 80%;
+    margin: 0 auto;
 }
 
 /* Responsiveness: Strictly switch to 2 columns, no 3 or 1 */

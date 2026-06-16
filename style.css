@@ -9,55 +9,66 @@
 body {
     background-color: #ffffff;
     overflow-x: hidden;
-    padding: 0vh 0 0 0; /* Breathing room from the top */
+    padding: 0vh 0 0 0;
+    /* Breathing room from the top */
 }
 
 .gallery-wrapper {
-    width: 100%; /* Full width */
+    width: 100%;
+    /* Full width */
     margin: 0;
 }
 
 /* Binary Column Gallery: Exactly 4 or 2 Columns */
 .gallery {
-    column-count: 4; /* Maximum 4 columns */
-    column-gap: 0vw; /* Larger gap between columns */
+    column-count: 4;
+    /* Maximum 4 columns */
+    column-gap: 0vw;
+    /* Larger gap between columns */
     width: 100%;
 }
 
 .gallery-item {
     break-inside: avoid;
-    margin-bottom: 0vw; /* Larger gap between rows */
+    margin-bottom: 0vw;
+    /* Larger gap between rows */
     overflow: hidden;
 }
 
 .gallery-item img {
     width: 100%;
-    height: auto; /* Full Glory - No Cropping */
+    height: auto;
+    /* Full Glory - No Cropping */
     display: block;
 }
 
 /* Site Footer - Appears naturally at the end of scroll */
 .site-footer {
-    padding: 60px 3vw 15px; /* Generous top padding to separate from gallery */
+    padding: 60px 3vw 15px;
+    /* Generous top padding to separate from gallery */
     background-color: #ffffff;
     font-family: "Tenor Sans", sans-serif;
 }
 
 .footer-content {
     display: grid;
-    grid-template-columns: 1fr auto 1fr; /* Center-Name, Right-Links structure */
+    grid-template-columns: 1fr auto 1fr;
+    /* Center-Name, Right-Links structure */
     align-items: center;
-    border-top: 1px solid #eee; /* Subtle separation line */
+    border-top: 1px solid #eee;
+    /* Subtle separation line */
     padding-top: 20px;
 }
 
 .footer-name {
-    grid-column: 2; /* Forces name to the center */
+    grid-column: 2;
+    /* Forces name to the center */
     font-family: "Vina Sans", sans-serif;
     font-weight: 400;
     letter-spacing: -0.01em;
     text-transform: uppercase;
-    font-size: 1.9rem; /* Slightly larger for Vina Sans impact */
+    font-size: 1.9rem;
+    /* Slightly larger for Vina Sans impact */
     white-space: nowrap;
 }
 
@@ -72,7 +83,8 @@ body {
 }
 
 .footer-nav {
-    grid-column: 3; /* Aligns links to the right */
+    grid-column: 3;
+    /* Aligns links to the right */
     justify-self: end;
 }
 
@@ -108,6 +120,7 @@ body {
     .gallery-6-col {
         grid-template-columns: repeat(4, 1fr);
     }
+
     .gallery-5-col {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -171,9 +184,11 @@ body {
 /* Responsiveness: Strictly switch to 2 columns, no 3 or 1 */
 @media (max-width: 1300px) {
     .gallery {
-        column-count: 2; /* Minimum 2 columns */
+        column-count: 2;
+        /* Minimum 2 columns */
         column-gap: 0vw;
     }
+
     .gallery-item {
         margin-bottom: 0vw;
     }
@@ -185,6 +200,7 @@ body {
         gap: 30px;
         text-align: center;
     }
+
     .footer-nav {
         justify-self: center;
     }
@@ -193,9 +209,10 @@ body {
 /* Responsiveness: Strictly switch to 2 columns, no 3 or 1 */
 @media (max-width: 400px) {
     .gallery {
-        column-count: 1; /* Minimum 2 columns */
+        column-count: 1;
         column-gap: 0vw;
     }
+
     .gallery-item {
         margin-bottom: 0vw;
     }
@@ -207,7 +224,43 @@ body {
         gap: 30px;
         text-align: center;
     }
+
     .footer-nav {
         justify-self: center;
     }
+}
+
+/* Lightbox Styles */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: zoom-out;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    user-select: none;
+}
+
+.gallery-item img {
+    cursor: zoom-in;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item img:hover {
+    filter: brightness(0.85);
 }
